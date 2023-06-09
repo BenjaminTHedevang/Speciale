@@ -7,15 +7,14 @@ Created on Wed Oct  5 08:45:12 2022
 # Modul import
 import numpy as np
 
-Parameter = 'Poulsen' # Navn på ændret parameter
+Parameter = 'Default' # Navn på ændret parameter
 Default = ''
 #Model:
-dt = 1/480 # Tidsskridt, [min]
+dt = 1/240 # Tidsskridt, [min]
 dz = 1/4 # vertikal cellestørrelse [cm]
 regn_varighed = 20 # min
 regn_intensitet = 0.7 #cm/min
-Poulsen = True # Brug af Ksat regnet ved Poulsen (True) eller målt (False)
-Tylle = False # Benyttelse af jordegenskaber fra Tylstrup (52 - 76 cm)
+Poulsen = False # Brug af Ksat regnet ved Poulsen (True) eller målt (False)
 g_dir = 1 # Retning af gravitation, 1 = Ned, 0 = Horisontal, -1 = Op (Kapillær)
 rhob = 1.7 # Øget kompaktering [g/cm3]
 ror_celle = 60 # Celle nummer hvorfra øget kompaktering sker
@@ -29,7 +28,7 @@ theta_airdry = 0.002827
 
 
 GW_dist = 35 # afstand til grundvandsspejl, her i sandboksen, [cm]
-stepsave = 2  # Gem hver nth step
+stepsave = 1  # Gem hver nth step
 n_cells = int(GW_dist/dz)  # Antal celler
 depth = np.array(np.arange(dz/2, dz*n_cells, dz))  # Midten af modelcellerne (Dybde) [cm]
 t_n = int(dt**(-1)*60*2)   # Antallet af tidsskridt [-]
@@ -42,7 +41,7 @@ if g_dir == 1:
     regn_array[:int(dt**(-1)*regn_varighed)] = regn_intensitet
 
 #Initialbetingelser:
-theta_hot = np.load('Hot_start72t025cm025s.npy')[-1,:] if Tylle == False else np.load('Jordfugtighed_hotstartTylle.npy')[-1,:]
+theta_hot = np.load('Hot_start.npy')
 F_acc = [0] # Akkumuleret infiltration
 rhoref = 1.5 # Normal kompaktering
 tt = [regn_array[0]*dt/dz] #Top reservoir liste
@@ -62,14 +61,6 @@ GI_idle = np.array([0.11, 0.13, 0.14, 0.16, 0.17, 0.19, 0.20, 0.22,
 Holtan_a = 0.6  # Vegetationsparameter for given afgrød/
 
 # Jordegenskaber
-
-if Tylle == True:
-    b = 4.21
-    psi_entry = -2.74
-    theta_s = 0.435
-    theta_wp = 0.069
-    theta_airdry = 0.002827
-
 
 theta_fc = theta_s*(psi_entry/-100)**(1/b)  # Water content at FC [cm^3/cm^3]
 
@@ -218,8 +209,7 @@ for t in range(1, t_n):
                 tr = 0
                 theta[0] -= Overskud
             else:
-                tr -= inflow[t]
-        #trtrt.append(result)   
+                tr -= inflow[t] 
     else:
         Pressure_Gradient = 0
         result = 0
