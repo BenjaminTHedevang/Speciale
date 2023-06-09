@@ -1,3 +1,5 @@
+# Ternært Vand - Indsivning af uvedkommende vand i afløbssystemer
+
 Projektet ''Indsivning af uvedkommende vand i afløbssystemer'' er et afgangsspeciale på 3. - 4. semester af kandidaten i 'Water and Environmental Engineering' (Vand og Miljø) på Aalborg Universitet.
 
 Den numeriske model, som sammenligner med en eksperimentel sandboks, regner på kvantificering og tidspunkt for indsivning i et rørsystem.
